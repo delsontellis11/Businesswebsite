@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" contents="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+</head>
+<body>
+    <section id="header">
+        <h1>SPORTS ZONE</h1>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="cart.html">Mycart</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                
+            </ul>
+        </div>
+    </section>
+
+    <section id="cart" class="section-p1">
+        <h4>Shopping Cart</h4>
+        <div class="cart-container">
+            <!-- Cart items will be displayed here -->
+        </div>
+        <div class="total-bill">
+            Total: <span id="total-amount">$0.00</span>
+        </div>
+    </section>
+
+    <script>
+        // Retrieve the cart from local storage
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Display the cart items and calculate the total
+        const cartContainer = document.querySelector(".cart-container");
+        const totalAmountElement = document.getElementById("total-amount");
+
+        function updateCartDisplay() {
+            cartContainer.innerHTML = '';
+            let totalAmount = 0;
+
+            cart.forEach((product, index) => {
+                const cartItem = document.createElement("div");
+                cartItem.classList.add("cart-item");
+                cartItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="item-details">
+                        <span class="item-name">${product.name}</span>
+                        <span class="item-price">$${product.price.toFixed(2)}</span>
+                    </div>
+                    <button class="remove-button" data-index="${index}">Remove from Cart</button>
+                `;
+                cartContainer.appendChild(cartItem);
+
+                totalAmount += product.price;
+            });
+
+            totalAmountElement.textContent = `$${totalAmount.toFixed(2)}`;
+        }
+
+        updateCartDisplay(); // Call to initially display the cart items and total
+
+        // Add event listeners for remove buttons
+        cartContainer.addEventListener("click", (event) => {
+            if (event.target.classList.contains("remove-button")) {
+                const index = parseInt(event.target.getAttribute("data-index"));
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartDisplay();
+            }
+        });
+    </script>
+       <footer id="footer">
+        <div class="container">
+            <p>&copy; 2023 Your Sportz Shop</p>
+        </div>
+    </footer>  
+
+</body>
+</html>
